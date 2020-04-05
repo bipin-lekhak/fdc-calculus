@@ -12,6 +12,7 @@ matplotlib = "*"
 bokeh = "*"
 ipython = "*"
 wemake-python-styleguide = "*"
+ipykernel = "*"
 
 [requires]
 python_version = "3.8"
