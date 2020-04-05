@@ -3,21 +3,25 @@ import numpy as np
 
 from bokeh.io import curdoc
 from bokeh.layouts import column, row
-from bokeh.models import ColumnDataSource, Slider, Button
+from bokeh.models import ColumnDataSource, Slider, Button, Toggle
 from bokeh.plotting import figure
+from copy import deepcopy as copy
 
-np.random.seed(42)
+np.random.seed(420)
 
 num_points = 100
 m = 2
 x_line = np.arange(-1, 5.1, 0.1)
 x = np.random.rand(num_points) * 5
 
-y = m * x + np.random.randn(num_points)
+y = m * x + np.random.randn(num_points) * 2
 y_line = m * x_line
 
 scatter_data = ColumnDataSource(data=dict(x=x, y=y))
 line_data = ColumnDataSource(data=dict(x=x_line, y=y_line))
+
+
+indexes = np.random.randint(num_points, size=(5,))
 
 pair_plot = figure(
     plot_height=400,
@@ -39,6 +43,9 @@ pair_plot.line(
 # Set up widgets
 set_m = Slider(title='m', value=m, start=0, step=0.1, end=10)
 animate_button = Button(label='► Play', button_type='primary')
+cluttered_button = Toggle(
+    label='Filter points', button_type='primary', width=200
+)
 
 
 # Setup callbacks
@@ -74,6 +81,19 @@ def animate_button_callback():
 
 animate_button.on_click(animate_button_callback)
 
-layout = column(animate_button, set_m, pair_plot)
+
+# Clutter button
+def clutter_button_callback(attr):
+    if cluttered_button.active:
+        scatter_data.data = {'x': x[indexes], 'y': y[indexes]}
+        cluttered_button.button_type = 'success'
+    else:
+        scatter_data.data = {'x': x, 'y': y}
+        cluttered_button.button_type = 'primary'
+
+
+cluttered_button.on_click(clutter_button_callback)
+
+layout = column(animate_button, set_m, pair_plot, cluttered_button)
 curdoc().add_root(layout)
 curdoc().title = "LR"
