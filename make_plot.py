@@ -38,8 +38,7 @@ pair_plot.line(
 
 # Set up widgets
 set_m = Slider(title='m', value=m, start=0, step=0.1, end=10)
-m_incrementor = Button(label='m + 0.1', button_type='primary')
-m_decrementor = Button(label='m - 0.1', button_type='primary')
+animate_button = Button(label='► Play', button_type='primary')
 
 
 # Setup callbacks
@@ -55,20 +54,26 @@ def change_m(attr, old, new):
 set_m.on_change('value', change_m)
 
 
-def increase_m():
-    set_m.value += 0.1
+# Animate
+def animate_update():
+    new_m = set_m.value + .1
+    if new_m > 10:
+        new_m = 0
+    set_m.value = new_m
 
 
-m_incrementor.on_click(increase_m)
+def animate_button_callback():
+    global callback_id
+    if animate_button.label == '► Play':
+        animate_button.label = '❚❚ Pause'
+        callback_id = curdoc().add_periodic_callback(animate_update, 200)
+    else:
+        animate_button.label = '► Play'
+        curdoc().remove_periodic_callback(callback_id)
 
 
-def decrease_m():
-    set_m.value -= 0.1
+animate_button.on_click(animate_button_callback)
 
-
-m_decrementor.on_click(decrease_m)
-
-buttons = row(m_decrementor, set_m, m_incrementor, width_policy='fit')
-layout = column(buttons, pair_plot)
+layout = column(animate_button, set_m, pair_plot)
 curdoc().add_root(layout)
 curdoc().title = "LR"
