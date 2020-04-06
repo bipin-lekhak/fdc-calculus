@@ -13,6 +13,7 @@ bokeh = "*"
 ipython = "*"
 wemake-python-styleguide = "*"
 ipykernel = "*"
+sympy = "*"
 
 [requires]
 python_version = "3.8"
