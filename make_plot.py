@@ -68,7 +68,7 @@ error_plot = figure(
     plot_width=400,
     title="Error Plots",
     tools="crosshair,pan,reset,save,wheel_zoom",
-    x_range=[start_m, end_m],
+    x_range=[start_m - 0.5, end_m + 0.5],
     y_range=[0, 2000],
 )
 error_land_data = ColumnDataSource(data=dict(
@@ -161,6 +161,8 @@ def clutter_button_callback(attr):
         error_val = [utils.compute_error(new_x, new_y, i) for i in error_param]
         error_land_data.data = dict(x=error_param, y=error_val)
 
+        error_plot.y_range.update(start=0, end=400)
+
     else:
         cluttered_button.button_type = 'primary'
         scatter_data.data = {'x': x, 'y': y}
@@ -168,6 +170,8 @@ def clutter_button_callback(attr):
         error_param = error_land_data.data['x']
         error_val = [utils.compute_error(x, y, i) for i in error_param]
         error_land_data.data = dict(x=error_param, y=error_val)
+
+        error_plot.y_range.update(start=0, end=2000)
 
 
 cluttered_button.on_click(clutter_button_callback)
