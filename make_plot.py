@@ -69,7 +69,7 @@ error_plot = figure(
     title="Error Plots",
     tools="crosshair,pan,reset,save,wheel_zoom",
     x_range=[start_m - 0.5, end_m + 0.5],
-    y_range=[0, 2000],
+    y_range=[0, 50],
 )
 error_land_data = ColumnDataSource(data=dict(
     x=[m], y=[utils.compute_error(x, y, m)],
@@ -161,8 +161,6 @@ def clutter_button_callback(attr):
         error_val = [utils.compute_error(new_x, new_y, i) for i in error_param]
         error_land_data.data = dict(x=error_param, y=error_val)
 
-        error_plot.y_range.update(start=0, end=400)
-
     else:
         cluttered_button.button_type = 'primary'
         scatter_data.data = {'x': x, 'y': y}
@@ -170,8 +168,6 @@ def clutter_button_callback(attr):
         error_param = error_land_data.data['x']
         error_val = [utils.compute_error(x, y, i) for i in error_param]
         error_land_data.data = dict(x=error_param, y=error_val)
-
-        error_plot.y_range.update(start=0, end=2000)
 
 
 cluttered_button.on_click(clutter_button_callback)
@@ -181,10 +177,8 @@ def button_draw_error_callback(attr):
     if button_draw_error.active:
         button_draw_error.button_type = 'success'
         error_glyph.line_alpha = 1.0
-        error_glyph.line_alpha = 1.0
     else:
         button_draw_error.button_type = 'primary'
-        error_glyph.line_alpha = 0.0
         error_glyph.line_alpha = 0.0
 
 
