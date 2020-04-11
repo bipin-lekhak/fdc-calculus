@@ -10,6 +10,9 @@ To run this code:
 ## Setup Pipenv environment using PipFile
 ```pipenv install```
 
+## Activate pipenv virtual environment
+```pipenv shell```
+
 ## Run Bokeh server for required plot files
 ```bokeh serve <file>.py```
 
